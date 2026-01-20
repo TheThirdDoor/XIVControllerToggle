@@ -1,3 +1,4 @@
+using Dalamud.Bindings.ImGui;
 using Dalamud.Game;
 using Dalamud.Game.Command;
 using Dalamud.Game.Config;
@@ -126,7 +127,26 @@ namespace XIVControllerToggle {
         }
 
         private DateTime controllerProcessDelay = DateTime.Now;
+
+        private unsafe bool IsInputActive() {
+            // 1. Check ImGui (Dalamud Plugins)
+            if (ImGui.GetIO().WantCaptureKeyboard) return true;
+
+            // 2. Check Game Chat / Search Bars (The "Native" way)
+            var uiModule = UIModule.Instance();
+            if (uiModule == null) return false;
+
+            var raptureAtkModule = uiModule->GetRaptureAtkModule();
+            if (raptureAtkModule == null) return false;
+
+            // This covers Chat, Party Finder search, Market Board search, etc
+            return raptureAtkModule->AtkModule.IsTextInputActive();
+        }
+
         private unsafe bool IsKeyboardMovement() {
+            // Do nothing if the user has a text input highlighted
+            if (IsInputActive()) return false;
+
             var ks = KeyState;
             var uiInput = UIInputData.Instance();
 
