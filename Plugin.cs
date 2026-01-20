@@ -131,6 +131,7 @@ namespace XIVControllerToggle {
             var uiInput = UIInputData.Instance();
 
             // Get basic movement keys regardless of what they are set to
+            // Could be customised further in a settings window by storing this elsewhere and adding or removing these based on user settings
             InputId[] movementIds = {
                 InputId.MOVE_FORE,
                 InputId.MOVE_BACK,
