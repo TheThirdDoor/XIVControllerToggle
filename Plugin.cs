@@ -161,6 +161,7 @@ namespace XIVControllerToggle {
             // No matches
             return false;
         }
+
         private void Update_ProcessKeypresses() {
             // Run every 250ms
             if (DateTime.Now < controllerProcessDelay) return;
